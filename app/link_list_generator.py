@@ -22,49 +22,56 @@ import variables as myvars
 from selenium.webdriver.chrome.options import Options
 
 
-
+ 
 all_links_csv_name = myvars.all_links_csv_name
 num_of_pages = myvars.num_of_pages  #how many pages of adverts should be scanned for specific property urls? 
                                     #Can change this to an input using var 'myvars.num_of_pages_input'
 
-chrome_options = Options()
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument('--headless')
-chrome_options.add_argument("--window-size=1920,1080")
-chrome_options.add_argument("--start-maximized")
+
 
 class DAFTFORRENTCRAWLER:
     list_of_individual_advert_links = []
     #if exists, will return an array of the values
-    list_of_all_db_rows = rds_connector.return_existing_db_urls() #this is called outside of the function so it only gets called once. 
-
+    
 
     def __init__(self):
         pass
+
+    def start_driver(self):
+        """
+        Starting the driver this way so it can be used in other files
+        """
+        chrome_options = Options()
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument("--window-size=1920,1080")
+        chrome_options.add_argument("--start-maximized")
+        global driver #globalise driver
+        driver = Chrome(ChromeDriverManager().install(),chrome_options=chrome_options)
+        return driver
    
-    def open_site(self): 
+    def open_site(self, url = "https://www.daft.ie/property-for-rent/ireland"): 
         """
         Opens the site and accepts the cookies notice
         """
-        global driver #globalise driver
-        url = "https://www.daft.ie/property-for-rent/ireland"
-        driver = Chrome(ChromeDriverManager().install(),chrome_options=chrome_options)
         driver.get(url)
         try: 
             time.sleep(4)#accept the cookie banner
             cookiexpath = '/html/body/div[1]/div/div/main/div/button[2]' #cookie-accept xpath
             accept_cookies_button = driver.find_element(by=By.XPATH, value=cookiexpath) #To make the driver point to the element
             accept_cookies_button.click() #make the driver click on the element
-
         except:
             print('the scraper was not able to accept cookies and has failed')
+        finally:
+            return driver
 
 
     def get_all_individual_advert_links(self):
         """
         Grab all hrefs on page. if the href includes 'daft.ie/for-rent/' put them in a list 
         """
+
         elems = driver.find_elements_by_xpath("//a[@href]") # xpath for hrefs on the page
         for elem in elems: #for every href xpath
             x = elem.get_attribute("href") #x = value of the href
@@ -86,8 +93,9 @@ class DAFTFORRENTCRAWLER:
             pass
 
     def remove_links_already_in_database(self):
+        list_of_all_db_rows = rds_connector.return_existing_db_urls()
         for csv_link in DAFTFORRENTCRAWLER.list_of_individual_advert_links:
-            if csv_link in DAFTFORRENTCRAWLER.list_of_all_db_rows:
+            if csv_link in list_of_all_db_rows:
                 DAFTFORRENTCRAWLER.list_of_individual_advert_links.remove(csv_link)
             else:
                 pass
@@ -131,7 +139,7 @@ class DAFTFORRENTCRAWLER:
             
 def run_crawler():
     start_crawl_class = DAFTFORRENTCRAWLER()
+    start_crawl_class.start_driver()
     start_crawl_class.open_site()
     start_crawl_class.get_add_links_on_all_pages()
-
 
