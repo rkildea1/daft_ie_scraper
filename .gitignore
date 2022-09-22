@@ -2,3 +2,8 @@ venv
 private_variables.py
 __pycache__
 requirements.txt
+.env
+*.csv
+output*
+*.ipynb
+a_*
