@@ -1,4 +1,4 @@
-import serp_urls_scraper as start
+import link_list_generator as start
 
 def run_full_crawl():
     start.run_crawler()
