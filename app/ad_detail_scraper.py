@@ -3,8 +3,6 @@ import time
 from file_handler import LOCALFILESHANDLER
 import scraper_configurations as get_details
 lfh = LOCALFILESHANDLER() 
-# import aws_s3_image_writer
-# import variables_pub_c5 as myvars
 
 """
 runs the scraper configuration to capture all individual advert details
@@ -27,7 +25,7 @@ def run_get_details_crawler():
     
     get_details.start_driver()
     capture_data = get_details.SCRAPER()
-    for specific_ad_url in links_of_individual_adverts[0:3]: #added slicing for testing purposes
+    for specific_ad_url in links_of_individual_adverts[0:10]: #added slicing for testing purposes
         count = count + 1 #only really used to monitor the progress of the script. #can be removed. 
         print(specific_ad_url) #prints the current advert to console #can be removed
         print(f'Currently on Ad Number: {count}') #only really used to monitor the progress of the script. #can be removed.
@@ -37,7 +35,6 @@ def run_get_details_crawler():
         get_details.check_page_is_not_parent_dev() # Checks that the page is actually an ad page using XPATH
         time.sleep(4)
         #start capturing the data
-        
         capture_data.get_prop_address() #Gets the address of the property
         capture_data.get_prop_description() #Gets the description section of each advert
         capture_data.get_prop_baths() #Gets the count of baths in the property
@@ -50,12 +47,9 @@ def run_get_details_crawler():
         capture_data.get_prop_main_photo() #Gets the total advert views if it exists
     else:
         df_of_captured_data = get_details.create_dataframe_from_lists() #Creates a DF from all the scraped data. Also assigns each record with a UUID(v4)
-        # lfh = LOCALFILESHANDLER() 
         lfh.write_json_locally(df_of_captured_data)
 #     
 #         print(f'complete. Captured {count} ads') #prints a total count of ads captured. Can remove this
-#         get_details.create_dataframe_from_lists() #Creates a DF from all the scraped data. Also assigns each record with a UUID(v4)
-#         extract_df_and_write_locally_as_json() #Creates a directory on the root to write the dataframe to a .json
 #         aws_s3_image_writer.upload_json_to_s3() #upload the json to s3
 #         download_images_and_write_to_s3() #Downloads images of each ad, using the link catptured from the crawl
 #         get_details.driver.close() #closes the browser window 
