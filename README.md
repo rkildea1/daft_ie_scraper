@@ -7,9 +7,11 @@ Files Summary:
 - rds_connector.py
     - Various methods to connect and manage a MySQL database
 - variables.py
-    - reference to shared variables
+    - Reference to shared variables
 - load_env.py
-    - used in default manner to leverage .env hidden variables
+    - Used in default manner to leverage .env hidden variables
+- file_handler.py
+    - Various methods for extracting/ writing files
     
 
 

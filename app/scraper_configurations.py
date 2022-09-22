@@ -8,6 +8,9 @@ from selenium.webdriver.common.by import By
 prop_url_list = []
 
 class SCRAPER:
+    """
+    includes all methods for capturing the ad related text information 
+    """
 
     prop_address_list = []
     prop_type_list = []
@@ -109,7 +112,7 @@ class SCRAPER:
         """
         try:#first XPATH type
             views = driver.find_element(by=By.XPATH, value="(//*[contains(@class,'Statistics__StyledLabel-sc-15tgae4-1')])[2]").text
-            SCRAPER.iews_list.append(views)
+            SCRAPER.views_list.append(views)
         except:
             views = '*** no value found ***'
             SCRAPER.views_list.append(views)
@@ -210,24 +213,16 @@ def check_page_is_not_parent_dev():
 
 
                 
+
+
 def create_dataframe_from_lists():
     """
-    Method Summary: creates a DF from all the scraped data. Also assigns each record a UUID(v4)
-    - create blank list 
-    - create a Var for count of loop
-    - use a While loop to create a list of UUIDs
+    Method Summary: creates a DF from all the scraped data. 
     create a dict from all the lists
-    write the dict to a df and print it. 
+    write the dict to a df. 
     """
-    uuid_list = []
-    countUUID = 0
-
-    while countUUID < len(SCRAPER.prop_main_photo_list): #this can be any of the lists
-        uuid_list.append(str(uuid.uuid4()))
-        countUUID += 1
 
     dict_for_df = { 
-        'UUID':uuid_list,
         'Ad_link':prop_url_list,
         'Address':SCRAPER.prop_address_list,
         'Type':SCRAPER.prop_type_list,
@@ -241,9 +236,8 @@ def create_dataframe_from_lists():
         'Main Photo': SCRAPER.prop_main_photo_list
     }
     df = pd.DataFrame(dict_for_df)
-    print(df)
+    # print(df)
     return df
-
 
 
 
