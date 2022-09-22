@@ -60,4 +60,8 @@ def run_get_details_crawler():
 # if __name__ == '__main__':
 #     run_get_details_crawler()
 
+<<<<<<< HEAD
 run_get_details_crawler()
+=======
+run_get_details_crawler()
+>>>>>>> 7a60e280ebadfc234d297be1aa076cd17bcd2121
