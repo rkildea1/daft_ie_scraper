@@ -47,7 +47,7 @@ class LOCALFILESHANDLER:
     #     for ad_url in series_of_all_ad_urls_captured:
     #         links_of_individual_adverts.append(ad_url) #moved from get_ad_details module as dont think it was in use there
     
-    def extract_df_and_write_locally_as_json(self):
+    def write_json_locally(self,df):
         """
         Function summary: Write the results to a .json
         create a directory to store the json
@@ -58,7 +58,7 @@ class LOCALFILESHANDLER:
         except:
             pass 
         finally:
-            # get_details.df.to_json(myvars.json_output_path) #filename for json
+            df.to_json(myvars.json_output_path) #filename+path for json
             pass
 
 #OLD

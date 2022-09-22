@@ -12,7 +12,7 @@ csv_output_path = (output_files_folder_name+'/'+all_links_csv_name) #prints `out
 
 timestamp = time.strftime("%Y%m%d-%H%M%S")
 json_file_path = (output_files_folder_name+'/'+'ad_details_raw')
-json_file_name = 'data.json'+timestamp
+json_file_name = ('data'+timestamp+'.json')
 json_output_path = (json_file_path+'/'+json_file_name)
 
 
