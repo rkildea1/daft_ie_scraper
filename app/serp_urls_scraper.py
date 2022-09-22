@@ -1,26 +1,24 @@
 """
-Capture the url of every for-rent advertisement on the website 
+Capture the url of every for-rent advertisement on the website search engine results page (SERP)
 Works by 
-- opening the first page of daft.ie/for-rent/ pages
-- then goes through every followon page (page 2, page 3 etc)
-- captures all urls that contain for-rent in the url and writes them to a dataframe
+- opening the first page of daft.ie/for-rent/
+- then goes through every followon SERP (page 2, page 3 etc)
+- captures all urls that contain `for-rent` in the url and writes them to a pandas series
 - checks if any url exists already in the database
 - if the url does not exist in the database it gets written to a csv file and stored on the root.
 """
 
 import os
 from re import M
-from webbrowser import Chrome
-from selenium import webdriver
+# from webbrowser import Chrome #don't think these are used anywhere
+# from selenium import webdriver #don't think these are used anywhere
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Chrome
 import time
 import pandas as pd
 from webdriver_manager.chrome import ChromeDriverManager
-# import sql_checker_c4 as sqlchecker # new name is rds_connector.py
-# import storage_managers.rds_connector as rds_connector
-# import variables_pub_c5 as myvars # new name is public_variables.py
-import variables.public_variables as myvars
+import rds_connector
+import variables as myvars
 from selenium.webdriver.chrome.options import Options
 
 
@@ -37,13 +35,9 @@ chrome_options.add_argument("--window-size=1920,1080")
 chrome_options.add_argument("--start-maximized")
 
 class DAFTFORRENTCRAWLER:
-
     list_of_individual_advert_links = []
     #if exists, will return an array of the values
-    try:
-        list_of_all_db_rows = rds_connector.check_sql_for_links_already_crawled() #this is called outside of the function so it only gets called once. 
-    except:
-        print('no rds_connector connection found')
+    list_of_all_db_rows = rds_connector.return_existing_db_urls() #this is called outside of the function so it only gets called once. 
 
 
     def __init__(self):
@@ -91,7 +85,6 @@ class DAFTFORRENTCRAWLER:
             print('no more pages')
             pass
 
-
     def remove_links_already_in_database(self):
         for csv_link in DAFTFORRENTCRAWLER.list_of_individual_advert_links:
             if csv_link in DAFTFORRENTCRAWLER.list_of_all_db_rows:
@@ -99,46 +92,46 @@ class DAFTFORRENTCRAWLER:
             else:
                 pass
 
-
-
     def get_add_links_on_all_pages(self):
         """
-        Go through each page, and run the two methods to capture all hrefs, and hit the next button
-        When count meets num_of_pages var, move to ELSE and write all links to a csv
+        Go through each serp page, and run the two methods to capture all hrefs, and hit the next button
+        When `count` meets `num_of_pages` var, move to ELSE and write all links to a csv
         then close the driver
         """
+        
         count = 0 #count for a while loop
         while count < num_of_pages:
             count = count + 1
-            time.sleep(5)
+            print(f'count = {count}') #test can remove
+            time.sleep(4)
             self.get_all_individual_advert_links() #make list of all for-sale links
-            time.sleep(5)
+            time.sleep(4)
             self.move_to_next_page() #move to the next page of adverts
             print(f"currently on results page number: {count}")
             print(f'So far we have collected this many adverts: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
         else:
             first_scrape_question = input('Is this your first scrape?[y]/[n]: ')
             if first_scrape_question.lower() == 'n':
+                # since its not the first crawl, there will be links already stored in the database and we want to check them for duplciates to prevent recrawling
                 print('Got it - lets check the database incase you have already crawled some of these links.......')
-                print(len(f'the count of urls before cross-referencing the database is: {DAFTFORRENTCRAWLER.list_of_individual_advert_links}'))
+                print(f'the count of urls before cross-referencing the database is: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
                 self.remove_links_already_in_database()
-                print(len(f'the count of urls after cross-referencing the database is: {DAFTFORRENTCRAWLER.list_of_individual_advert_links}'))
+                print(f'the count of urls after cross-referencing the database is: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
             else:
-                pass
+                pass # pass as there is no database list to already compare the crawl to
+            os.makedirs(myvars.output_files_folder_name,exist_ok=True) #create a directory to store the crawl locally
             adverts_series = pd.Series(DAFTFORRENTCRAWLER.list_of_individual_advert_links)
-            os.makedirs(myvars.output_files_folder_name,exist_ok=True)
             csv_storage_location =(myvars.output_files_folder_name+'/'+all_links_csv_name)
-            adverts_series.to_csv(csv_storage_location) #write the series to an excel file
-            ###for every line, 
-            # check if line exists in db 
-            # if it does, 
-            # delete from csv
+            adverts_series.to_csv(csv_storage_location) #write the series to a csv file
             print(f'All source links captured and stored in: {csv_storage_location}')
-            # import group_get_ad_details_c2 as gad
+            # import group_get_ad_details_c2 as gad #queing the import
             driver.close()
+            print(f'last count is: {count}')
             # gad.run_get_details_crawler(all_links_csv_name) #kick off the main crawler
             
 def run_crawler():
     start_crawl_class = DAFTFORRENTCRAWLER()
     start_crawl_class.open_site()
     start_crawl_class.get_add_links_on_all_pages()
+
+
