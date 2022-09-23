@@ -44,9 +44,9 @@ class SQLMANAGER:
             return blanklist
 
 
-def connect_to_database():
+def start_engine():
     """
-    Connects to the database
+    Starts the engine
     """
     DATABASE_TYPE = 'postgresql'
     DBAPI = 'psycopg2'
@@ -56,6 +56,13 @@ def connect_to_database():
     DATABASE = myvars.RDSDATABASENAME
     PORT = 5432
     engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
+    return engine
+
+def connect_to_database():
+    """
+    Connects to the database
+    """
+    engine = start_engine()
     return engine.connect()    
 
 
@@ -65,4 +72,19 @@ def return_existing_db_urls():
     """
     engine_connection = connect_to_database() #create the engine variable
     return SQLMANAGER.return_scraped_urls_from_table(engine_connection)
+
+
+def append_df_to_rds(df):
+    """
+    Write the argument dataframeto the database
+    """
+    df.to_sql(
+        name='refactored_table2',
+        con = start_engine(),
+        index=True,
+        if_exists="append",
+        chunksize=10
+    )
+    print(f'Number of rows successfully written to teh database table "{myvars.RDSTABLENAME}": '+ str(len(df.index)))
+
 
