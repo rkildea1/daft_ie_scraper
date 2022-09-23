@@ -118,25 +118,23 @@ class DAFTFORRENTCRAWLER:
             print(f"currently on results page number: {count}")
             print(f'So far we have collected this many adverts: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
         else:
-            first_scrape_question = input('Is this your first scrape?[y]/[n]: ')
-
-            if first_scrape_question.lower() == 'n':
-                # since its not the first crawl, there will be links already stored in the database and we want to check them for duplciates to prevent recrawling
-                print('Got it - lets check the database incase you have already crawled some of these links.......')
+            print('Checking if database already exists & can be scanned for crawled-urls.....')
+            try: #!!!!!!!need to add exception handling here to trigger the except clause!!!!!!!!
                 print(f'the count of urls before cross-referencing the database is: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
                 self.remove_links_already_in_database()
                 print(f'the count of urls after cross-referencing the database is: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
-            else:
-                pass # pass as there is no database list to already compare the crawl to
-            os.makedirs(myvars.output_files_folder_name,exist_ok=True) #create a directory to store the crawl locally
-            adverts_series = pd.Series(DAFTFORRENTCRAWLER.list_of_individual_advert_links)
-            csv_storage_location =(myvars.output_files_folder_name+'/'+all_links_csv_name)
-            adverts_series.to_csv(csv_storage_location) #write the series to a csv file
-            print(f'All source links captured and stored in: {csv_storage_location}')
-            # import group_get_ad_details_c2 as gad #queing the import
-            driver.close()
-            print(f'last count is: {count}')
-            # gad.run_get_details_crawler(all_links_csv_name) #kick off the main crawler
+            except:
+                print('Unable to find database.. If you have one please update the env variables. Otherwise, a new RDS should be created.....')
+            finally: 
+                os.makedirs(myvars.output_files_folder_name,exist_ok=True) #create a directory to store the crawl locally
+                adverts_series = pd.Series(DAFTFORRENTCRAWLER.list_of_individual_advert_links)
+                csv_storage_location =(myvars.output_files_folder_name+'/'+all_links_csv_name)
+                adverts_series.to_csv(csv_storage_location) #write the series to a csv file
+                print(f'All source links captured and stored in: {csv_storage_location}')
+                # import group_get_ad_details_c2 as gad #queing the import
+                driver.close()
+                print(f'last count is: {count}')
+                # gad.run_get_details_crawler(all_links_csv_name) #kick off the main crawler
             
 def run_crawler():
     start_crawl_class = DAFTFORRENTCRAWLER()
@@ -144,4 +142,3 @@ def run_crawler():
     start_crawl_class.open_site()
     start_crawl_class.get_add_links_on_all_pages()
 
-run_crawler()
