@@ -1,18 +1,26 @@
 # daft_ie_scraper
 
 Files Summary: 
-   
- - serp_urls_scraper.py
-     - Collect all SERP hrefs with `for-rent` in the url and store locally in a csv  
-- rds_connector.py
-    - Various methods to connect and manage a MySQL database
-- variables.py
-    - Reference to shared variables
-- load_env.py
-    - Used in default manner to leverage .env hidden variables
+
+- ad_detail_scraper.py
+    - This scripts is the central ETL script which triggers the other scripts
 - file_handler.py
     - Various methods for extracting/ writing files
-    
+- link_list_generator.py
+     - Collect all SERP hrefs with `for-rent` in the url and store locally in a csv  
+- load_env.py
+    - Used in default manner to leverage .env hidden variables
+- rds_connector.py
+    - Various methods to connect and manage a MySQL database
+- s3_manager.py
+    - Connect to and manage s3 
+- scraper_configurations.py 
+    - Includes the configurations for scraping the various datapoints    
+- transformer.py
+    - Cleaning methods and function
+- variables.py
+    - Reference to shared variables
+
 
 
 ## **Required .env File Variables**

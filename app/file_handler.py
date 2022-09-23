@@ -1,9 +1,8 @@
-'''
-Get csv
-get ad details
-get photos
-store locally
-'''
+
+import os
+import pandas as pd
+import variables as myvars
+import uuid
 
 
 
@@ -13,13 +12,8 @@ Puts all the information scraped into a json on the application root folder
 it downloads all images from the specific_ad_urls and then stores them in a folder on the root
 
 """
-import os
-import pandas as pd
-import variables as myvars
-from selenium.webdriver import Chrome
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-import uuid
+
+
 class LOCALFILESHANDLER: 
     
 
@@ -40,21 +34,21 @@ class LOCALFILESHANDLER:
   
     def write_json_locally(self,df):
         """
-        Function summary: Write the results to a .json
         create a directory to store the json
+        read in a dataframe and and a UUID column
         write the dataframe to a .json
         """
         uuid_list = []
         countUUID = 0
-        while countUUID < len(df.index): 
+        while countUUID < len(df.index): #create a list of UUIDs the length of the dataframe index
             uuid_list.append(str(uuid.uuid4()))
             countUUID += 1
-        try:
-            os.makedirs(myvars.json_file_path,exist_ok=True)
+        try: #create a directory if it doesn't exist
+            os.makedirs(myvars.json_file_path,exist_ok=True) 
         except:
             pass 
         finally:
-            
+            df.insert(0, 'UUID', uuid_list)#Add the UUID to the dataframe to the first column
             df.to_json(myvars.json_output_path) #filename+path for json
             pass
 
