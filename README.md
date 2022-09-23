@@ -30,10 +30,12 @@ Files Summary:
 ```
 Running order
 ├── main.py
-│   ├── serp_urls_scraper.py
+│   ├── link_list_generator.py
 │   │   ├── rds_connector.py
 │   │   │   ├── variables.py
 │   │   │   │   ├──load-env.py
 │   │   │   │   │   ├──.env
 │   │   │   │   │   │
+
+
 ```

@@ -25,7 +25,7 @@ def run_get_details_crawler():
     
     get_details.start_driver()
     capture_data = get_details.SCRAPER()
-    for specific_ad_url in links_of_individual_adverts[0:10]: #added slicing for testing purposes
+    for specific_ad_url in links_of_individual_adverts[0:2]: #added slicing for testing purposes
         count = count + 1 #only really used to monitor the progress of the script. #can be removed. 
         print(specific_ad_url) #prints the current advert to console #can be removed
         print(f'Currently on Ad Number: {count}') #only really used to monitor the progress of the script. #can be removed.
