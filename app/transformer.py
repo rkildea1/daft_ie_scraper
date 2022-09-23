@@ -98,8 +98,7 @@ class CLEANER:
         #drop Price as no longer needed
         self.df['Valid_Advert'] = self.df['Price'].apply(CLEANER_ITERATOR.find_ads_with_no_details)
         self.df = self.df[self.df['Valid_Advert'].str.contains('No')==False]
-        # self.df = self.df.drop(['Valid_Advert'], axis =1)
-        # self.df = self.df.drop(['Price'], axis =1)
+
         self.df = self.df.drop(['Valid_Advert'], axis =1)
         self.df = self.df.drop(['Price'], axis =1)
         return self.df
@@ -147,4 +146,3 @@ def create_df_for_cleaning(): #gets called from ad_detail_scraper
     return kick_off_etl(df)  ##return the cleaned dataframe from the class call
 
 
-# create_df_for_cleaning()
