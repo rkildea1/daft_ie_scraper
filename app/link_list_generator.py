@@ -119,6 +119,7 @@ class DAFTFORRENTCRAWLER:
             print(f'So far we have collected this many adverts: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
         else:
             first_scrape_question = input('Is this your first scrape?[y]/[n]: ')
+
             if first_scrape_question.lower() == 'n':
                 # since its not the first crawl, there will be links already stored in the database and we want to check them for duplciates to prevent recrawling
                 print('Got it - lets check the database incase you have already crawled some of these links.......')
@@ -143,3 +144,4 @@ def run_crawler():
     start_crawl_class.open_site()
     start_crawl_class.get_add_links_on_all_pages()
 
+run_crawler()

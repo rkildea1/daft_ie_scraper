@@ -15,7 +15,6 @@ json_file_path = (output_files_folder_name+'/'+'ad_details_raw')
 json_file_name = ('data'+timestamp+'.json')
 json_output_path = (json_file_path+'/'+json_file_name)
 
-
 local_image_folder_path = (output_files_folder_name+'/'+'ad_details_photos/') #which directory on your machine should you store the photos 
 s3_photo_folder_path = 'ad_details_photos/' #which directory on s3 should you store the photos
 
@@ -27,3 +26,8 @@ RDSPASS = load_env_vars.RDSPASS
 RDSHOST = load_env_vars.RDSHOST
 RDSUSER = load_env_vars.RDSUSER
 RDSDATABASENAME = load_env_vars.RDSDATABASENAME
+
+#s3 details
+awskey = load_env_vars.awskey
+awsid = load_env_vars.awsid
+s3_bucket_name = load_env_vars.s3_bucket_name

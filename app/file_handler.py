@@ -1,9 +1,8 @@
-'''
-Get csv
-get ad details
-get photos
-store locally
-'''
+
+import os
+import pandas as pd
+import variables as myvars
+import uuid
 
 
 
@@ -13,13 +12,8 @@ Puts all the information scraped into a json on the application root folder
 it downloads all images from the specific_ad_urls and then stores them in a folder on the root
 
 """
-import os
-import pandas as pd
-import variables as myvars
-from selenium.webdriver import Chrome
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-import uuid
+
+
 class LOCALFILESHANDLER: 
     
 
