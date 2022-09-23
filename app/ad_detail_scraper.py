@@ -20,6 +20,7 @@ def pass_in_list_of_individual_ad_links():
 def run_get_details_crawler():
     links_of_individual_adverts = pass_in_list_of_individual_ad_links()
     count = 0 #only really used to monitor the progress of the script. #can be removed. 
+    
     get_details.start_driver() #start up the driver
     capture_data = get_details.SCRAPER() #start the sraper configuration class
     for specific_ad_url in links_of_individual_adverts[0:3]: #added slicing for testing purposes
