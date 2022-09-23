@@ -2,7 +2,9 @@ import time
 from file_handler import LOCALFILESHANDLER
 import scraper_configurations as get_details
 import transformer
+import rds_connector
 lfh = LOCALFILESHANDLER() 
+
 
 """
 runs the scraper configuration to capture all individual advert details
@@ -48,8 +50,11 @@ def run_get_details_crawler():
         lfh.write_json_locally(df_of_captured_data)
         print(f'complete. Captured {count} ads') #prints a total count of ads captured. Can remove this
         transformed_df = transformer.create_df_for_cleaning() #returns cleaned dataframe
-        print(transformed_df)
-        #clean the data and return
+        rds_connector.append_df_to_rds(transformed_df) #writes argument to dataframe
+
+        # upload the cleaned dataframe to RDS 
+        # upload the raw json to s3
+
 
 
 
