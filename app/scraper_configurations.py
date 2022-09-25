@@ -167,14 +167,6 @@ class SCRAPER:
         pass
 
 
-
-
-
-
-
-
-
-
     pass
 
 def start_driver():
