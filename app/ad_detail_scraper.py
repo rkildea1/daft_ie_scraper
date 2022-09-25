@@ -4,7 +4,7 @@ import scraper_configurations as get_details
 import transformer
 import rds_connector
 lfh = LOCALFILESHANDLER() 
-
+import s3_manager as s3
 
 """
 runs the scraper configuration to capture all individual advert details
@@ -51,8 +51,8 @@ def run_get_details_crawler():
         print(f'complete. Captured {count} ads') #prints a total count of ads captured. Can remove this
         transformed_df = transformer.create_df_for_cleaning() #returns cleaned dataframe
         rds_connector.append_df_to_rds(transformed_df) #writes argument to dataframe
+        s3.upload_json_to_s3() #need to create the buck
 
-        # upload the cleaned dataframe to RDS 
         # upload the raw json to s3
 
 

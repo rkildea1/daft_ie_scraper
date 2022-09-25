@@ -236,7 +236,6 @@ def create_dataframe_from_lists():
         'Main Photo': SCRAPER.prop_main_photo_list
     }
     df = pd.DataFrame(dict_for_df)
-    # print(df)
     return df
 
 
