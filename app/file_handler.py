@@ -54,7 +54,10 @@ class LOCALFILESHANDLER:
 
 
 
-    def store_images_locally(self):
-
+    def create_and_return_local_image_drectory(self):
+        """
+        Create a storage location for images and return the location 
+        """
         os.makedirs(myvars.local_image_folder_path,exist_ok=True)
+        return myvars.local_image_folder_path
 

@@ -85,6 +85,7 @@ def append_df_to_rds(df):
         if_exists="append",
         chunksize=10
     )
-    print(f'Number of rows successfully written to teh database table "{myvars.RDSTABLENAME}": '+ str(len(df.index)))
+    print(f'.......Successfully uploaded  {str(len(df.index))} rows from the cleaned dataframe to RDS table: `{myvars.RDSTABLENAME}`' )
+    # print(f'Number of rows successfully written to teh database table "{myvars.RDSTABLENAME}": '+ str(len(df.index)))
 
 
