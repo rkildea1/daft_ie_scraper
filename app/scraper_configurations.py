@@ -2,9 +2,13 @@ import pandas as pd
 import regex as re
 import time
 import uuid
+from file_handler import LOCALFILESHANDLER
+lfh = LOCALFILESHANDLER() 
 from link_list_generator import DAFTFORRENTCRAWLER
 from selenium.webdriver.common.by import By
-
+import string
+import variables as myvars
+import s3_manager as s3
 prop_url_list = []
 
 class SCRAPER:
@@ -165,6 +169,14 @@ class SCRAPER:
 
 
 
+
+
+
+
+
+
+    pass
+
 def start_driver():
     """
     Uses method from link_list_generator to create the driver
@@ -241,4 +253,38 @@ def create_dataframe_from_lists():
 
 
 
+def image_downloader():
+    """
+    Download a screenshot of the main image from the advert url
+    """
+    print('......Starting image downloader')
+    zip_of_photo_url_and_prop_address = zip(SCRAPER.prop_main_photo_list, SCRAPER.prop_address_list) #create a zip_iterable of the image URL and prop_address
+    
+    target_image_folder = lfh.create_and_return_local_image_drectory() #create and return the target image folder
 
+
+    
+    for image_url,prop_address in zip_of_photo_url_and_prop_address:
+        
+        cleaned_name = (prop_address.translate(str.maketrans('', '', string.punctuation)))
+        save_name = cleaned_name.replace(" ", "")
+        ftype = '.png'
+        if 'novaluefound' in save_name: #images without a description (i.e., images which are parent-ad adverts can be skipped as they are cleaned from the dataframe anyways)
+            pass
+        else:
+            try:
+                driver.get(image_url)
+                time.sleep(3)
+                print('......Starting image download')
+                driver.save_screenshot(target_image_folder+save_name+ftype)
+                aws_image_name = save_name+ftype
+                local_image_location= target_image_folder+save_name+ftype 
+                print('......Starting upload to s3')
+                s3.upload_image_to_s3(local_image_location, aws_image_name, myvars.s3_photo_folder_path)
+                print('......upload complete - moving to next image...')
+            except:
+                print('not reaching image download try')
+                pass
+    print('......All images downloaded & passed to S3 successfully')
+        
+    

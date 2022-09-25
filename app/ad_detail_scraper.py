@@ -52,16 +52,8 @@ def run_get_details_crawler():
         transformed_df = transformer.create_df_for_cleaning() #returns cleaned dataframe
         rds_connector.append_df_to_rds(transformed_df) #writes argument to dataframe
         s3.upload_json_to_s3() #need to create the buck
-
-        # upload the raw json to s3
-
-
-
-
-
-        # aws_s3_image_writer.upload_json_to_s3() #upload the json to s3
-#         download_images_and_write_to_s3() #Downloads images of each ad, using the link catptured from the crawl
-#         get_details.driver.close() #closes the browser window 
+        get_details.image_downloader()
+        get_details.driver.close() #closes the browser window 
 
 
 # if __name__ == '__main__':
