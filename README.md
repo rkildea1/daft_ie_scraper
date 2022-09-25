@@ -34,16 +34,3 @@ Files Summary:
     * RDS_DATABASENAME=RDS_DATABASENAME
 
 
-## **Run-Flow**
-```
-Running order
-├── main.py
-│   ├── link_list_generator.py
-│   │   ├── rds_connector.py
-│   │   │   ├── variables.py
-│   │   │   │   ├──load-env.py
-│   │   │   │   │   ├──.env
-│   │   │   │   │   │
-
-
-```

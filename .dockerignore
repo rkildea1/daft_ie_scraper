@@ -1,0 +1,6 @@
+.git
+app/.env
+app/venv/**
+app/venv/*/**
+app/__pycache__/**/*
+app/__pycache__/

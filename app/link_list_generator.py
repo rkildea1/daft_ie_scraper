@@ -122,7 +122,8 @@ class DAFTFORRENTCRAWLER:
         count = 0 #count for a while loop
         total_no_of_pages = self.get_count_of_SERPs()
         print(f'....The crawler has identified {total_no_of_pages} advertisement results pages for for-rent adverts in Ireland')
-        while count < total_no_of_pages: 
+        # while count < total_no_of_pages: 
+        while count < 1: # add a slice for testing
             count = count + 1
             print(f'....Currently crawling SERP number: {count}') #test can remove
             time.sleep(4) #let the page load up
