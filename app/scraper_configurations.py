@@ -178,6 +178,9 @@ def start_driver():
     driver = start_driver.start_driver() #calls method from link_list_generator.DAFTFORRENTCRAWLER
     return driver 
 
+def stop_driver():
+    driver.close()
+
 def open_site(url): 
     """
     Method Summary: Opens the site and accepts the cookies notice

@@ -49,7 +49,7 @@ class DAFTFORRENTCRAWLER:
         driver = Chrome(ChromeDriverManager().install(),chrome_options=chrome_options)
         return driver
    
-    def open_site(self, url = "https://www.daft.ie/property-for-rent/ireland"): 
+    def open_site(self, url = "https://www.daft.ie/property-for-rent/ireland?sort=publishDateDesc"): 
         """
         Opens the site and accepts the cookies notice
         """
@@ -100,6 +100,16 @@ class DAFTFORRENTCRAWLER:
 
     
 
+    def get_count_of_SERPs(self):
+        try:#first XPATH type
+            count_of_serps = driver.find_element(by=By.XPATH, value="(//*[contains(@class,'NewButton__ButtonText-yem86a-0 cIVIcD')])[9]").text
+            count_of_serps = int(count_of_serps)
+            print(f'Total number of SERP recorded is: {count_of_serps}')
+            return count_of_serps
+        except:
+            print('could not determine how many SERP results pages to crawl. Please check your xpath definition for last-page text')
+            pass
+
 
 
     def get_add_links_on_all_pages(self):
@@ -110,21 +120,23 @@ class DAFTFORRENTCRAWLER:
         """
         
         count = 0 #count for a while loop
-        while count < 1: #replace this with a function to check the last page number of the serp
+        total_no_of_pages = self.get_count_of_SERPs()
+        print(f'....The crawler has identified {total_no_of_pages} advertisement results pages for for-rent adverts in Ireland')
+        while count < total_no_of_pages: 
             count = count + 1
-            print(f'count = {count}') #test can remove
-            time.sleep(4)
+            print(f'....Currently crawling SERP number: {count}') #test can remove
+            time.sleep(4) #let the page load up
             self.get_all_individual_advert_links() #make list of all for-sale links
-            time.sleep(4)
+            time.sleep(3)
             self.move_to_next_page() #move to the next page of adverts
-            print(f"currently on results page number: {count}")
-            print(f'So far we have collected this many adverts: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
+            print(f'....Total number of hrefs with `for-rent` collected so far is: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
         else:
-            print('Checking if database already exists & can be scanned for crawled-urls.....')
+            print('....Crawl complete. Moving to next task')
+            print('....Checking if database already exists & if it can be scanned for crawled-urls.....')
             try: #!!!!!!!need to add exception handling here to trigger the except clause!!!!!!!!
-                print(f'the count of urls before cross-referencing the database is: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
+                print(f'....checking complete: The count of urls before cross-referencing the database was: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
                 self.remove_links_already_in_database()
-                print(f'the count of urls after cross-referencing the database is: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
+                print(f'....The count of urls after cross-referencing the database is: {len(DAFTFORRENTCRAWLER.list_of_individual_advert_links)}')
             except:
                 print('Unable to find database.. If you have one please update the env variables. Otherwise, a new RDS should be created.....')
             finally: 
@@ -133,26 +145,15 @@ class DAFTFORRENTCRAWLER:
                 csv_storage_location =(myvars.output_files_folder_name+'/'+all_links_csv_name)
                 adverts_series.to_csv(csv_storage_location) #write the series to a csv file
                 print(f'All source links captured and stored in: {csv_storage_location}')
-                print(f'last count is: {count}')
                 
             
 def run_crawler():
     start_crawl_class = DAFTFORRENTCRAWLER()
     start_crawl_class.start_driver()
     start_crawl_class.open_site()
-
     start_crawl_class.get_add_links_on_all_pages()
     import ad_detail_scraper
     ad_detail_scraper.run_get_details_crawler()
     
 
 
-
-    # def get_count_of_SERPs(self):
-    #     try:#first XPATH type
-    #         count_of_serps = driver.find_element(by=By.XPATH, value="(//*[contains(@class,'NewButton__ButtonText-yem86a-0 cIVIcD')])[9]").text
-    #         count_of_serps = int(count_of_serps)
-    #         return count_of_serps
-    #     except:
-    #         print('could not determine how many SERP results pages to crawl. Please check your xpath definition for last-page text')
-    #         pass

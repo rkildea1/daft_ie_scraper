@@ -53,10 +53,6 @@ def run_get_details_crawler():
         rds_connector.append_df_to_rds(transformed_df) #writes argument to dataframe
         s3.upload_json_to_s3() #need to create the buck
         get_details.image_downloader()
-        get_details.driver.close() #closes the browser window 
+        get_details.stop_driver()
+        print('....crawl complete....') 
 
-
-# if __name__ == '__main__':
-#     run_get_details_crawler()
-
-run_get_details_crawler()
