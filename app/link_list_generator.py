@@ -10,8 +10,6 @@ Works by
 
 import os
 from re import M
-# from webbrowser import Chrome #don't think these are used anywhere
-# from selenium import webdriver #don't think these are used anywhere
 from selenium.webdriver.common.by import By
 from selenium.webdriver import Chrome
 import time
@@ -100,6 +98,10 @@ class DAFTFORRENTCRAWLER:
             else:
                 pass
 
+    
+
+
+
     def get_add_links_on_all_pages(self):
         """
         Go through each serp page, and run the two methods to capture all hrefs, and hit the next button
@@ -108,7 +110,7 @@ class DAFTFORRENTCRAWLER:
         """
         
         count = 0 #count for a while loop
-        while count < num_of_pages:
+        while count < 1: #replace this with a function to check the last page number of the serp
             count = count + 1
             print(f'count = {count}') #test can remove
             time.sleep(4)
@@ -131,14 +133,26 @@ class DAFTFORRENTCRAWLER:
                 csv_storage_location =(myvars.output_files_folder_name+'/'+all_links_csv_name)
                 adverts_series.to_csv(csv_storage_location) #write the series to a csv file
                 print(f'All source links captured and stored in: {csv_storage_location}')
-                # import group_get_ad_details_c2 as gad #queing the import
-                driver.close()
                 print(f'last count is: {count}')
-                # gad.run_get_details_crawler(all_links_csv_name) #kick off the main crawler
+                
             
 def run_crawler():
     start_crawl_class = DAFTFORRENTCRAWLER()
     start_crawl_class.start_driver()
     start_crawl_class.open_site()
-    start_crawl_class.get_add_links_on_all_pages()
 
+    start_crawl_class.get_add_links_on_all_pages()
+    import ad_detail_scraper
+    ad_detail_scraper.run_get_details_crawler()
+    
+
+
+
+    # def get_count_of_SERPs(self):
+    #     try:#first XPATH type
+    #         count_of_serps = driver.find_element(by=By.XPATH, value="(//*[contains(@class,'NewButton__ButtonText-yem86a-0 cIVIcD')])[9]").text
+    #         count_of_serps = int(count_of_serps)
+    #         return count_of_serps
+    #     except:
+    #         print('could not determine how many SERP results pages to crawl. Please check your xpath definition for last-page text')
+    #         pass
