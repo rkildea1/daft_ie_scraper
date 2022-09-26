@@ -54,5 +54,6 @@ def run_get_details_crawler():
         s3.upload_json_to_s3() #need to create the buck
         get_details.image_downloader()
         get_details.stop_driver()
+        lfh.delete_local_files()
         print('....crawl complete....') 
 

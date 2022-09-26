@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import variables as myvars
 import uuid
-
+import shutil
 
 
 """
@@ -53,11 +53,24 @@ class LOCALFILESHANDLER:
             pass
 
 
-
     def create_and_return_local_image_drectory(self):
         """
         Create a storage location for images and return the location 
         """
         os.makedirs(myvars.local_image_folder_path,exist_ok=True)
         return myvars.local_image_folder_path
+
+
+    def delete_local_files(self):
+        """clear all local files"""
+        # location
+        location = "."
+        # directory
+        dir = "output_files"
+        # path
+        path = os.path.join(location, dir)
+        # removing directory
+        shutil.rmtree(path, ignore_errors=False)
+        print('......Locally stored files have been removed successfully')
+
 
