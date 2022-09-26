@@ -79,7 +79,7 @@ def append_df_to_rds(df):
     Write the argument dataframeto the database
     """
     df.to_sql(
-        name='refactored_table2',
+        name=myvars.RDSTABLENAME,
         con = start_engine(),
         index=True,
         if_exists="append",

@@ -142,7 +142,7 @@ class DAFTFORRENTCRAWLER:
                 print('Unable to find database.. If you have one please update the env variables. Otherwise, a new RDS should be created.....')
             finally: 
                 os.makedirs(myvars.output_files_folder_name,exist_ok=True) #create a directory to store the crawl locally
-                adverts_series = pd.Series(DAFTFORRENTCRAWLER.list_of_individual_advert_links)
+                adverts_series = pd.Series(DAFTFORRENTCRAWLER.list_of_individual_advert_links).drop_duplicates()
                 csv_storage_location =(myvars.output_files_folder_name+'/'+all_links_csv_name)
                 adverts_series.to_csv(csv_storage_location) #write the series to a csv file
                 print(f'All source links captured and stored in: {csv_storage_location}')
