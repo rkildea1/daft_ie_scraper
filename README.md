@@ -1,6 +1,13 @@
 # daft_ie_scraper
 
-Files Summary: 
+
+## App Summary
+
+- App goes to the `for-rent` section of daft and grabs various datapoints from each of the advertised properties. Cleans the datapoints and loads them into an RDS MySQL database. Takes the original datapoints and loads them into an S3 bucket. It also captures the primary photo from all advetisements and stores them in an S3 bucket. Repo includes a docker  docker compose 
+
+
+
+## Files Summary: 
 
 - ad_detail_scraper.py
     - This scripts is the central ETL script which triggers the other scripts
